@@ -102,6 +102,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _services_PhoneService__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./services/PhoneService */ "./application/services/PhoneService.js");
 /* harmony import */ var _filters_SearchPhonesFilter__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./filters/SearchPhonesFilter */ "./application/filters/SearchPhonesFilter.js");
 /* harmony import */ var _directives_phones_list__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./directives/phones-list */ "./application/directives/phones-list.js");
+/* harmony import */ var _directives_single_phone_directive__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./directives/single-phone-directive */ "./application/directives/single-phone-directive.js");
 
 
 //====================CONTROLLERS===========================//
@@ -117,6 +118,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 //====================DIRECTIVES==============================//
+
 
 
 angular.module('PhoneApplication.controllers' , []);
@@ -153,6 +155,9 @@ angular.module('PhoneApplication.services')
 angular.module('PhoneApplication.directives' )
     .directive('phonesListDirective' , _directives_phones_list__WEBPACK_IMPORTED_MODULE_6__["default"]);
 
+angular.module('PhoneApplication.directives')
+    .directive('singlePhoneDirective', _directives_single_phone_directive__WEBPACK_IMPORTED_MODULE_7__["default"]);
+
 let app = angular.module('PhoneApplication',[
     'ngRoute',
     'LocalStorageModule',
@@ -188,7 +193,12 @@ app.config( [
     $routeProvider.when('/single-phone/:phoneID' , {
 
         controller: [ '$scope', '$routeParams' , 'CartService' , 'PhoneService' , _controllers_PhoneController__WEBPACK_IMPORTED_MODULE_1__["default"]],
-        templateUrl: 'templates/single-phone.html'
+        templateUrl: 'templates/single-phone.html',
+        resolve:{
+            'phone': [ 'PhoneService', function (PhoneService){
+                return PhoneService.getSinglePhone(`phones/.json`);
+            }]
+        },//resolve
 
     });
 
@@ -330,7 +340,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return PhonesList; });
 
 
-
 function PhonesList(){
 
     return {
@@ -355,6 +364,48 @@ function PhonesList(){
     }//return
 
 }//PhonesList
+
+/***/ }),
+
+/***/ "./application/directives/single-phone-directive.js":
+/*!**********************************************************!*\
+  !*** ./application/directives/single-phone-directive.js ***!
+  \**********************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return SinglePhoneDirective; });
+/* harmony import */ var _controllers_PhoneController__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../controllers/PhoneController */ "./application/controllers/PhoneController.js");
+
+
+
+
+function SinglePhoneDirective(){
+
+    return{
+
+        restrict: 'EAC',
+        scope:{
+            phone: '=singlePhone'
+
+        },//scope
+        templateUrl: 'templates/directives/single-phone-directive.html',
+        controller: [ '$scope', 'PhoneController', function ($scope, PhoneController){
+
+            $scope.addToCartClick = function (phone){
+                PhoneController.addPhoneToCart(phone);
+            }//addToCartClick
+
+        }]
+
+    }//return
+
+}//SinglePhoneDirective
+
+
+
 
 /***/ }),
 

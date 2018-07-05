@@ -14,6 +14,7 @@ import SearchPhonesFilter from './filters/SearchPhonesFilter';
 
 //====================DIRECTIVES==============================//
 import PhonesList from './directives/phones-list';
+import SinglePhoneDirective from './directives/single-phone-directive';
 
 angular.module('PhoneApplication.controllers' , []);
 angular.module('PhoneApplication.services' , []);
@@ -48,6 +49,9 @@ angular.module('PhoneApplication.services')
 
 angular.module('PhoneApplication.directives' )
     .directive('phonesListDirective' , PhonesList);
+
+angular.module('PhoneApplication.directives')
+    .directive('singlePhoneDirective', SinglePhoneDirective);
 
 let app = angular.module('PhoneApplication',[
     'ngRoute',
@@ -84,7 +88,12 @@ app.config( [
     $routeProvider.when('/single-phone/:phoneID' , {
 
         controller: [ '$scope', '$routeParams' , 'CartService' , 'PhoneService' , PhoneController],
-        templateUrl: 'templates/single-phone.html'
+        templateUrl: 'templates/single-phone.html',
+        resolve:{
+            'phone': [ 'PhoneService', function (PhoneService){
+                return PhoneService.getSinglePhone(`phones/.json`);
+            }]
+        },//resolve
 
     });
 

@@ -1,6 +1,6 @@
 "use strict";
 
-export  default class PhoneController{
+export default class PhoneController{
 
     constructor($scope, $routeParams , CartService , PhoneService){
 
